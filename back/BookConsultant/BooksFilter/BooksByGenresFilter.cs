@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using BookConsultant.Model;
 using BookConsultant.Repository;
 
@@ -13,12 +14,12 @@ namespace BookConsultant.BooksFilter
             this.genresRepository = genresRepository;
         }
         
-        public Book[] Filter(Book[] books, string?[]? genres)
+        public FilteredBook[] Filter(FilteredBook[] books, string?[]? genres)
         {
             if (genres == null || genres.All(string.IsNullOrEmpty))
                 return books;
 
-            var booksDictionary = books.ToDictionary(x => x.IsbnNumber);
+            var booksDictionary = books.ToDictionary(x => x.Book.IsbnNumber);
             var genresDictionary = genresRepository.GetAll().ToDictionary(x => x.Name.ToLower());
             
             return genres.Where(x => !string.IsNullOrEmpty(x))
@@ -28,7 +29,7 @@ namespace BookConsultant.BooksFilter
                          .Where(x => x.BooksIsbnNumbers != null)
                          .SelectMany(x => x.BooksIsbnNumbers)
                          .Where(booksDictionary.ContainsKey)
-                         .Select(x => booksDictionary[x])
+                         .Select(x => booksDictionary[x].AddFilter("genres"))
                          .ToArray();
         }
 

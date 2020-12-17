@@ -41,7 +41,7 @@ export default class Consultant extends React.Component {
           </p>
         </div>
         <div>
-          {this.state.books.map((book, index) => <p>{index + 1}: ({book.isbnNumber}) {book.name} : мы выбрали книги потому что, потому что</p>)}
+          {this.state.books.map((filteredBook, index) => <p>{index + 1}: ({filteredBook.book.isbnNumber}) {filteredBook.book.name} : мы выбрали книги потому что, потому что {this.filtersToHtml(filteredBook.filters)}</p>)}
         </div>
       </div>
     );
@@ -49,6 +49,20 @@ export default class Consultant extends React.Component {
 
   // сделать фичу: почему мы выбрали именно эту книгу (попытаться учесть каждый этап выбора на бэкенде - результат каждого фильтра)
   // явно разделить интерфейс администратора, интерфейс эксперта, интерфейс пользователя (тупо вкладки сделать и норм, разделить права: админ умеет все, эксперть - чуть меньше, пользователь - еще меньше)
+
+  filterToText = function (filter) { 
+    switch(filter) {
+      case 'authors':
+        return 'Авторы';
+      case 'genres':
+        return 'Жанры';
+      case 'tags':
+        return 'Эмоции';
+      case 'rating':
+        return 'Рейтинг';
+    }
+  }
+  filtersToHtml = filters => filters.map((filter, _) => <span className="filter">{this.filterToText(filter)}</span>);
 
   handleNumberChange = e => {
     this.searchCriteria[e.target.id] = parseInt(e.target.value);

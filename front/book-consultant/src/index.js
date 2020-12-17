@@ -7,25 +7,24 @@ import Genres from './Genres';
 import Tags from './Tags';
 import Ratings from './Ratings';
 import Books from './Books';
+import User from './Roles/User';
+import Admin from './Roles/Admin';
+import Expert from './Roles/Expert';
 
 ReactDOM.render(
-    <Router>
-      <div>
+  <Router>
+    <div>
         <nav>
-          <NavLink exact to="/">Консультант</NavLink>
-          <NavLink to="/genres">Жанры</NavLink>
-          <NavLink to="/books">Книги</NavLink>
-          <NavLink to="/ratings">Рейтинги </NavLink>
-          <NavLink to="/tags">Теги</NavLink>
+            <NavLink className="tabbed-page" exact to="/">Пользователь</NavLink>
+            <NavLink className="tabbed-page" to="/admin">Админ</NavLink>
+            <NavLink className="tabbed-page" to="/expert">Эксперт</NavLink>
         </nav>
         <Switch>
-          <Route exact path="/" component={Consultant} />
-          <Route path="/genres" component={Genres} />
-          <Route path="/tags" component={Tags} />
-          <Route path="/ratings" component={Ratings} />
-          <Route path="/books" component={Books} />
+            <Route exact path="/" component={User} />
+            <Route path="/admin" component={Admin} />
+            <Route path="/expert" component={Expert} />
         </Switch>
-      </div>
-    </Router>,
+    </div>
+  </Router>,
   document.getElementById('root')
 );

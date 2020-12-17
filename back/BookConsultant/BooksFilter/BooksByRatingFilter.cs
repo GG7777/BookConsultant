@@ -13,18 +13,18 @@ namespace BookConsultant.BooksFilter
             this.ratingsRepository = ratingsRepository;
         }
         
-        public Book[] Filter(Book[] books, int? minRating)
+        public FilteredBook[] Filter(FilteredBook[] books, int? minRating)
         {
             if (minRating == null)
                 return books;
 
-            var booksDictionary = books.ToDictionary(x => x.IsbnNumber);
+            var booksDictionary = books.ToDictionary(x => x.Book.IsbnNumber);
             
             return ratingsRepository.GetAll()
                                     .Where(x => x.Value >= minRating)
                                     .Select(x => x.BookIsbnNumber)
                                     .Where(booksDictionary.ContainsKey)
-                                    .Select(x => booksDictionary[x])
+                                    .Select(x => booksDictionary[x].AddFilter("rating"))
                                     .ToArray();
         }
 

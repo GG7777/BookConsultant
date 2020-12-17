@@ -7,13 +7,13 @@ namespace BookConsultant.BooksFilter
 {
     public class BooksByMaxCountFilter
     {
-        public Book[] Filter(Book[] books, int? maxCount)
+        public FilteredBook[] Filter(FilteredBook[] books, int? maxCount)
         {
             if (maxCount == null)
                 return books;
             
             if (maxCount < 0)
-                return new Book[0];
+                return new FilteredBook[0];
 
             return books.Take(maxCount.Value).ToArray();
         }

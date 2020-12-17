@@ -13,12 +13,12 @@ namespace BookConsultant.BooksFilter
             this.tagsRepository = tagsRepository;
         }
         
-        public Book[] Filter(Book[] books, string?[]? tags)
+        public FilteredBook[] Filter(FilteredBook[] books, string?[]? tags)
         {
             if (tags == null || tags.All(string.IsNullOrEmpty))
                 return books;
             
-            var booksDictionary = books.ToDictionary(x => x.IsbnNumber);
+            var booksDictionary = books.ToDictionary(x => x.Book.IsbnNumber);
             var tagsDictionary = tagsRepository.GetAll().ToDictionary(x => x.Name.ToLower());
             
             return tags.Where(x => !string.IsNullOrEmpty(x))
@@ -28,7 +28,7 @@ namespace BookConsultant.BooksFilter
                        .Where(x => x.BooksIsbnNumbers != null)
                        .SelectMany(x => x.BooksIsbnNumbers)
                        .Where(booksDictionary.ContainsKey)
-                       .Select(x => booksDictionary[x])
+                       .Select(x => booksDictionary[x].AddFilter("tags"))
                        .ToArray();
         }
 
